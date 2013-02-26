@@ -1,0 +1,45 @@
+NAME="git-flow"
+VERSION=0.4.1
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="Git extensions to provide high-level repository operations for Vincent Driessen's branching model."
+DESCRIPTION="A collection of Git extensions to provide high-level repository operations for Vincent Driessen's branching model.
+
+For the best introduction to get started with git flow, please read Jeff Kreeftmeijer's blog post:
+http://jeffkreeftmeijer.com/2010/why-arent-you-using-git-flow/"
+
+
+HOMEPAGE="https://github.com/nvie/gitflow"
+
+GIT_URI="git://github.com/nvie/gitflow.git"
+GIT_TAG="${PV}"
+
+# Build dependencies only
+DEPEND=""
+# runtime deps to go in setup.hint, and note the escaped newline
+REQUIRES="git git-completion bash-completion"
+
+
+EXEC_FILES="git-flow"
+SCRIPT_FILES="git-flow-init git-flow-feature git-flow-hotfix git-flow-release git-flow-support git-flow-version gitflow-common gitflow-shFlags"
+
+
+inherit git
+
+# We use the standard src_compile and src_test.
+
+src_compile() {
+	echo "No compilation required."
+}
+src_install() {
+	cd ${S}
+  for exec_file in $EXEC_FILES; do
+    dobin $exec_file
+  done;
+  insinto /usr/bin
+  for script_file in $SCRIPT_FILES; do
+    doins ${S}/$script_file
+  done;
+
+  newdoc README.mdown README
+}
